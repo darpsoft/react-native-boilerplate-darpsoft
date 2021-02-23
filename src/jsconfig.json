@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["./components/*"],
+      "@screens/*": ["./screens/*"],
+      "@utils/*": ["./utils/*"],
+      "@services/*": ["./utils/services/*"],
+      "@redux/*": ["./redux/*"],
+      "@database*": ["./database*"],
+      "@assets*": ["./assets*"]
+    }
+  }
+}
