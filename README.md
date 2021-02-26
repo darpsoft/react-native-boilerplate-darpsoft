@@ -6,6 +6,7 @@ Este proyecto es un skeleton para iniciar aplicaciones escalables, donde trabaja
 Hay que configurar las variables de entorno para que pueda funcionar el sistema
 
 > ./**.env.development** 
+> 
 > ./**.env.production**
 
 Se puede iniciar el proyecto con 
