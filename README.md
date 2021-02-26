@@ -3,6 +3,19 @@ Proyecto preparado para escalabilidad con React Native
 
 Este proyecto es un skeleton para iniciar aplicaciones escalables, donde trabaja con una estructura de carpetas tipo Boilerplate, además viene con varios utils creados por mi persona que facilitarán ciertas tareas.
 
+Hay que configurar las variables de entorno para que pueda funcionar el sistema
+
+> ./**.env.development** 
+> ./**.env.production**
+
+Se puede iniciar el proyecto con 
+
+> $ **yarn android**
+
+Pero no se te olvide instalar las librerías antes 😋 con
+
+> $ **yarn**
+
 ¿Con que viene dicho repositorio?
 
 ## ✅ react-redux
