@@ -1,6 +1,6 @@
-import { storage } from '../../navigation';
-import request, { getOptionsWithToken, getOptions } from '../request';
-import Config from 'react-native-config';
+import { storage } from "../../../index";
+import request, { getOptionsWithToken, getOptions } from "../request";
+import Config from "react-native-config";
 
 export class CreateFilter {
   constructor() {
@@ -10,11 +10,11 @@ export class CreateFilter {
     this.filterWhere = { where: {} };
     this.filterWhereSociety = {};
     this.filterFields = {};
-    this.formatNested = '';
-    this.formatNestedTo = '';
+    this.formatNested = "";
+    this.formatNestedTo = "";
     this.formatFunctionTo = false;
     this.filterRelationWhere = [];
-    this.filterQuery = '';
+    this.filterQuery = "";
   }
 
   resetFilter() {
@@ -24,11 +24,11 @@ export class CreateFilter {
     this.filterWhereSociety = {};
     this.filterEndpoint = { include: [] };
     this.filterWhere = { where: {} };
-    this.formatNested = '';
-    this.formatNestedTo = '';
+    this.formatNested = "";
+    this.formatNestedTo = "";
     this.formatFunctionTo = false;
     this.filterRelationWhere = [];
-    this.filterQuery = '';
+    this.filterQuery = "";
   }
 
   setFilterQuery(value) {
@@ -118,17 +118,13 @@ export class CreateFilter {
   }
 
   setFilterWhereWithSociety() {
-    const isLogged = Object.keys(this.getStorage('auth').dataUser).length === 0;
+    const isLogged = Object.keys(this.getStorage("auth").dataUser).length === 0;
     if (isLogged) {
-      this.setFilterWhereDefault(
-        'societyId',
-        this.getStorage('auth').societyId
-      );
+      this.setFilterWhereDefault("societyId", this.getStorage("auth").societyId);
     } else {
-      const { subSocietyId, societyId } = this.getStorage('auth').dataUser;
-      const society =
-        subSocietyId !== null && subSocietyId !== '' ? subSocietyId : societyId;
-      this.setFilterWhereDefault('societyId', society);
+      const { subSocietyId, societyId } = this.getStorage("auth").dataUser;
+      const society = subSocietyId !== null && subSocietyId !== "" ? subSocietyId : societyId;
+      this.setFilterWhereDefault("societyId", society);
     }
   }
 
@@ -176,9 +172,7 @@ export class CreateFilter {
               ...(include?.scope ?? {}),
               where: {
                 ...(include?.scope?.where ?? {}),
-                ...(this.filterRelationWhere?.find(
-                  (e) => e.relation === include.relation
-                )?.where ?? {}),
+                ...(this.filterRelationWhere?.find((e) => e.relation === include.relation)?.where ?? {}),
               },
             },
           };
@@ -207,26 +201,24 @@ export class CreateFilter {
 export class StorageServices extends CreateFilter {
   constructor() {
     super();
-    this.typeStorage = '';
-    this.nameStorage = '';
+    this.typeStorage = "";
+    this.nameStorage = "";
     this.store = {};
   }
 
   async setStorageCtx(ctx) {
-    this.typeStorage = 'ctx';
+    this.typeStorage = "ctx";
     // this.store = getOrCreateStore(await defaultValueStorage(ctx)).getState();
     this.store = storage.getState();
   }
 
   async setStorageDefault(storage) {
-    this.typeStorage = 'default';
+    this.typeStorage = "default";
     this.store = storage;
   }
 
   getOptions() {
-    return this.typeStorage !== ''
-      ? getOptionsWithToken(this.store.auth.tokenUser)
-      : getOptions();
+    return this.typeStorage !== "" ? getOptionsWithToken(this.store.auth.tokenUser) : getOptions();
   }
 
   ifExist(nameStorage) {
@@ -246,23 +238,15 @@ export class StorageServices extends CreateFilter {
       return element;
     }
 
-    const formatNested =
-      this.getFormatNestedTo() !== ''
-        ? '&formatNestedTo=' + this.getFormatNestedTo()
-        : '&formatNested=' + this.getFormatNested();
+    const formatNested = this.getFormatNestedTo() !== "" ? "&formatNestedTo=" + this.getFormatNestedTo() : "&formatNested=" + this.getFormatNested();
 
     try {
       const url = `${Config.URL_API}/${nameEndpoint}`;
       const options = this.getOptions();
-      console.log(
-        `Url : ${nameEndpoint} |`,
-        JSON.stringify(this.getFilterEndpoint())
-      );
+      console.log(`Url : ${nameEndpoint} |`, JSON.stringify(this.getFilterEndpoint()));
       return await request(
         `${url}?filter=${encodeURI(JSON.stringify(this.getFilterEndpoint()))}${
-          this.formatFunctionTo
-            ? '&formatFunctionTo=' + filtro.toString()
-            : formatNested
+          this.formatFunctionTo ? "&formatFunctionTo=" + filtro.toString() : formatNested
         }${this.getFilterQuery()}`,
         options
       );
@@ -289,10 +273,7 @@ export class StorageServices extends CreateFilter {
       };
       const url = `${Config.URL_API}/societies`;
       const options = this.getOptions();
-      const requests = await request(
-        `${url}?filter=${encodeURI(JSON.stringify(filter))}`,
-        options
-      );
+      const requests = await request(`${url}?filter=${encodeURI(JSON.stringify(filter))}`, options);
       requests
         .filter((request) => request[nameEndpoint])
         .forEach((request) => {

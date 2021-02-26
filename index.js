@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AppRegistry } from "react-native";
 import App from "./src/navigation";
 import { name as appName } from "./app.json";
@@ -21,6 +21,10 @@ const WithPaper = () => {
 };
 
 function Main() {
+  useEffect(() => {
+    console.log("Versión 0.0.1");
+  }, []);
+
   return (
     <Provider store={storage}>
       <WithPaper />

@@ -1,15 +1,30 @@
 import { put, takeLatest, select, all, call } from "redux-saga/effects";
-import { showMessageError } from "@utils/request";
+import request, { getOptionsWithToken, postOptions, showMessageError } from "@utils/request";
 
-import { showLoader, hideLoader, loginSuccess } from "@redux/actions/auth";
+import { showLoader, hideLoader, loginSuccess } from "@redux/actions";
 import { LOGIN_START, REGISTER_START, UPDATE_REDUX_AUTH_START } from "@redux/constants";
 import { database } from "@database";
+import Config from "react-native-config";
 
-export function* Login() {
-  const storage = yield select((state) => state);
+let filter = {
+  where: {},
+};
+
+export function* Login({ payload }) {
+  let url, options;
   try {
     yield put(showLoader());
-    yield all([put(hideLoader())]);
+
+    url = `${Config.URL_API}/users/login`;
+    options = postOptions({ ...payload, celphone: parseInt(payload.celphone) });
+    const requestToken = yield call(request, url, options);
+
+    filter.where.celphone = parseInt(payload.celphone);
+    url = `${Config.URL_API}/users?filter=${JSON.stringify(filter)}`;
+    options = getOptionsWithToken(requestToken.token);
+    const requestUser = yield call(request, url, options);
+
+    yield all([put(loginSuccess({ tokenUser: requestToken.token, dataUser: requestUser[0] })), put(hideLoader())]);
   } catch (err) {
     yield put(hideLoader());
     yield showMessageError(err);

@@ -9,6 +9,7 @@ import "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { updateReduxAuthStart } from "@redux/actions";
 import { customUseReducer } from "@utils/customHooks";
+import { storage } from "../../index";
 
 var { height } = Dimensions.get("window");
 // Auth
@@ -20,6 +21,8 @@ import Register from "@screens/Register";
 
 // SplashScreen
 import SplashScreen from "@components/SplashScreen";
+import { throttle } from "lodash";
+import { database } from "@database";
 
 const RootStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -104,6 +107,7 @@ export default AppCreate = () => {
 
   useEffect(() => {
     initialRequest();
+    suscribeStorage();
   }, []);
 
   const initialRequest = async () => {
@@ -118,6 +122,18 @@ export default AppCreate = () => {
         console.log(err);
         dispatchComponent({ loading: false });
       });
+  };
+
+  /**
+   * Función para guardar los datos cuando se actualice el Storage, en este caso solo guardará <user, auth>
+   */
+  const suscribeStorage = () => {
+    storage.subscribe(
+      throttle(() => {
+        const { auth } = storage.getState();
+        database.auth.set(auth, "object");
+      }, 200)
+    );
   };
   return (
     <NavigationContainer theme={theme}>

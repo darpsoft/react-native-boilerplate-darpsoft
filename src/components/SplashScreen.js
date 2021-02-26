@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useStyleUniversal } from "@assets/styles/styles";
 
-const SplashScreen = () => {
+export const SplashScreen = () => {
   const theme = useTheme();
   const styles = { ...useStyle(theme), ...useStyleUniversal(theme) };
   return (
