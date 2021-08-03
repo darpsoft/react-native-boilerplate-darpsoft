@@ -17,7 +17,7 @@ const getInputsForm = ({ control }) => {
       label: "Teléfono",
       placeholder: "Ingrese un número de teléfono",
       name: "celphone",
-      defaultValue: "1000000",
+      defaultValue: "10000000",
       rules: { required: { value: true, message: "Debes escribir un número telefonico" } },
     },
     {
@@ -25,7 +25,7 @@ const getInputsForm = ({ control }) => {
       label: "Contraseña",
       placeholder: "Ingrese una contraseña",
       name: "password",
-      defaultValue: "adminImpuesto21",
+      defaultValue: "Tributon-impuestos2021",
       secureTextEntry: true,
       rules: { required: { value: true, message: "Debe escribir una contraseña" } },
     },
@@ -37,7 +37,7 @@ const Login = () => {
   const styles = { ...useStyle(theme), ...useStyleUniversal(theme) };
   const { control, handleSubmit, errors } = useForm();
   const inputsForm = useMemo(() => getInputsForm({ control }), []);
-  const { loader } = useSelector(({ auth }) => auth);
+  const { loader } = useSelector(({ settings }) => settings);
   const dispatch = useDispatch();
 
   const handleRegister = (values) => {
@@ -73,7 +73,7 @@ const Login = () => {
             />
           ))}
 
-        <Button mode="contained" loading={loader} onPress={handleSubmit(handleRegister)}>
+        <Button mode="contained" loading={loader} disabled={loader} onPress={handleSubmit(handleRegister)}>
           Iniciar Sesión
         </Button>
       </View>

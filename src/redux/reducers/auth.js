@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, UPDATE_REDUX_AUTH_SUCCESS } from "../constants";
+import { LOGIN_SUCCESS, SIGNOUT_SUCCESS, UPDATE_REDUX_AUTH_SUCCESS } from "../constants";
 
 export const initialState = {
   tokenUser: null,
@@ -6,12 +6,16 @@ export const initialState = {
 };
 
 const auth = (state = initialState, action) => {
+  console.log("🚀 ~ file: auth.js ~ line 9 ~ auth ~ action", action);
   switch (action.type) {
     case LOGIN_SUCCESS: {
       return { ...state, ...action.payload };
     }
     case UPDATE_REDUX_AUTH_SUCCESS: {
       return { ...state, ...action.payload };
+    }
+    case SIGNOUT_SUCCESS: {
+      return { ...state, ...initialState };
     }
     default:
       return state;

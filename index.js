@@ -12,10 +12,11 @@ import Config from "react-native-config";
 import SplashScreen from "@components/SplashScreen";
 import { useReducerCustom } from "@utils/customHooks";
 import { database } from "./src/database";
+import { isEqual } from "lodash";
 
 export const getStorageAsync = async () => {
   const auth = await database.auth.get("object");
-  return { ...(auth ?? {}) };
+  return { ...(isEqual(auth, {}) ? {} : { auth }) };
 };
 
 const WithStatusBar = () => {
@@ -53,6 +54,7 @@ function Main() {
   const initialRequest = async () => {
     !state.loading && dispatchComponent({ loading: true });
     const reducers = await getStorageAsync();
+    console.log("🚀 ~ file: index.js ~ line 56 ~ initialRequest ~ reducers", reducers);
     dispatchComponent({ loading: false, reducers });
   };
 

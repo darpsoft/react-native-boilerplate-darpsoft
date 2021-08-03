@@ -3,6 +3,8 @@ import {
   LOGIN_SUCCESS,
   REGISTER_START,
   REGISTER_SUCCESS,
+  SIGNOUT_START,
+  SIGNOUT_SUCCESS,
   UPDATE_REDUX_AUTH_START,
   UPDATE_REDUX_AUTH_SUCCESS,
 } from "@redux/constants";
@@ -13,6 +15,15 @@ export const loginStart = (payload) => ({
 });
 export const loginSuccess = (payload) => ({
   type: LOGIN_SUCCESS,
+  payload,
+});
+
+export const signoutStart = (payload) => ({
+  type: SIGNOUT_START,
+  payload,
+});
+export const signoutSuccess = (payload) => ({
+  type: SIGNOUT_SUCCESS,
   payload,
 });
 

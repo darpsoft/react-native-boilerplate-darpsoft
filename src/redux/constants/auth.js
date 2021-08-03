@@ -1,6 +1,9 @@
 export const LOGIN_START = "LOGIN_START";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 
+export const SIGNOUT_START = "SIGNOUT_START";
+export const SIGNOUT_SUCCESS = "SIGNOUT_SUCCESS";
+
 export const REGISTER_START = "REGISTER_START";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 
