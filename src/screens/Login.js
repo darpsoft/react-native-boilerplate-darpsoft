@@ -1,11 +1,13 @@
 import React, { useMemo } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import { Button, TextInput, useTheme } from "react-native-paper";
 import { useStyleUniversal } from "@assets/styles/styles";
 import { Wrapper, Text, ControllerTextInput } from "@components/index";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { loginStart } from "@redux/actions";
+
+const { width } = Dimensions.get("window");
 
 const getInputsForm = ({ control }) => {
   return [
@@ -45,7 +47,7 @@ const Login = () => {
     <Wrapper>
       <View style={{ flex: 1, justifyContent: "center" }}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Image source={require("../assets/images/logo.png")} />
+          <Image source={require("../assets/images/logo.png")} resizeMode="cover" style={{ width: width * 0.6, height: width * 0.6 }} />
           <Text>Bienvenido</Text>
         </View>
         {inputsForm
