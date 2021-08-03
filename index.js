@@ -54,7 +54,6 @@ function Main() {
   const initialRequest = async () => {
     !state.loading && dispatchComponent({ loading: true });
     const reducers = await getStorageAsync();
-    console.log("🚀 ~ file: index.js ~ line 56 ~ initialRequest ~ reducers", reducers);
     dispatchComponent({ loading: false, reducers });
   };
 

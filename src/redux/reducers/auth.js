@@ -6,7 +6,6 @@ export const initialState = {
 };
 
 const auth = (state = initialState, action) => {
-  console.log("🚀 ~ file: auth.js ~ line 9 ~ auth ~ action", action);
   switch (action.type) {
     case LOGIN_SUCCESS: {
       return { ...state, ...action.payload };
