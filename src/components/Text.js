@@ -5,6 +5,7 @@ import { useStyleUniversal } from "@assets/styles/styles";
 
 export const Text = (props) => {
   const theme = useTheme();
+  // eslint-disable-next-line no-unused-vars
   const styles = { ...useStyle(theme), ...useStyleUniversal(theme) };
   return <TextPaper {...props} />;
 };

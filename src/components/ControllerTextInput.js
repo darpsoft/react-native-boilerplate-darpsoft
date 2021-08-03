@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-unused-styles */
 import React from "react";
 import { Controller } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
@@ -9,7 +10,9 @@ export const ControllerTextInput = (props) => {
       <Controller {...props} />
       {props.errors[props.name] && (
         <Text style={{ color: "red" }}>
-          {props.errors[props.name].type === "validate" && !!props.validateMessageError ? props.validateMessageError : props.errors[props.name].message}
+          {props.errors[props.name].type === "validate" && !!props.validateMessageError
+            ? props.validateMessageError
+            : props.errors[props.name].message}
         </Text>
       )}
     </View>

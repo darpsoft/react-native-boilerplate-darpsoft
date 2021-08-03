@@ -1,7 +1,5 @@
-import request, { postOptionsFormData, postOptions } from './request';
-import moment from 'moment';
-import { get } from 'lodash';
-import Config from 'react-native-config';
+import moment from "moment";
+import { get } from "lodash";
 
 /**
  * Obtener filtro de reducer
@@ -12,10 +10,10 @@ import Config from 'react-native-config';
 export const getFilter = (payload, filterAffiliates) => {
   if (payload) {
     const { type, value } = payload;
-    if (type === 'societyId' && typeof filterAffiliates?.subSocietyId !== 'undefined') {
-      delete filterAffiliates['subSocietyId'];
+    if (type === "societyId" && typeof filterAffiliates?.subSocietyId !== "undefined") {
+      delete filterAffiliates.subSocietyId;
     }
-    const filterApply = value !== '' ? { [type]: value } : false;
+    const filterApply = value !== "" ? { [type]: value } : false;
     if (filterApply) {
       return {
         ...filterAffiliates,
@@ -37,38 +35,8 @@ export const getFilter = (payload, filterAffiliates) => {
 
 export const buildFormData = (data) => {
   const formData = new FormData();
-  formData.append('file', data);
+  formData.append("file", data);
   return formData;
-};
-
-/**
- * Subir una imagen al servidor
- * @param { containerName, fileFormdata, propsFilestorages } fileStorages
- */
-
-export const uploadFileStorages = async ({ containerName, fileFormdata, propsFilestorages, forSociety = false }) => {
-  try {
-    let url, option;
-    url = `${Config.URL_API}/containers/${containerName}/upload`;
-    const formData = buildFormData(fileFormdata);
-    option = postOptionsFormData(formData);
-    const requestUpload = await request(url, option);
-    const { size, name, originName, mediaLink, contentType } = requestUpload;
-
-    url = forSociety ? `societies/${propsFilestorages.societyId}/main-picture` : `file-storages`;
-    option = postOptions({
-      size: parseInt(size),
-      originName,
-      format: contentType,
-      name,
-      link: mediaLink,
-      state: 'ONLINE',
-      ...propsFilestorages,
-    });
-    return await request(`${Config.URL_API}/${url}`, option);
-  } catch {
-    throw 'No se pudo registrar la imagen';
-  }
 };
 
 /**
@@ -111,7 +79,7 @@ export const getFileStoragesObject = (object) => {
  * @param {*} object
  */
 export const cleanObject = (object) => {
-  for (var propName in object) {
+  for (const propName in object) {
     if (object[propName] === null || object[propName] === undefined) {
       delete object[propName];
     }
@@ -124,9 +92,9 @@ export const cleanObject = (object) => {
  */
 export const getTimeHoursAndMinutes = (countMinutes) => {
   // const hours = moment.utc().startOf("day").add({ minutes: countMinutes }).format("H").padStart(2, "0");
-  const hours = moment.utc().startOf('day').add({ minutes: countMinutes }).format('H');
-  const minutes = moment.utc().startOf('day').add({ minutes: countMinutes }).format('mm');
-  return `${hours !== '0' ? hours + ' Horas y' : ''} ${minutes} Minutos`;
+  const hours = moment.utc().startOf("day").add({ minutes: countMinutes }).format("H");
+  const minutes = moment.utc().startOf("day").add({ minutes: countMinutes }).format("mm");
+  return `${hours !== "0" ? hours + " Horas y" : ""} ${minutes} Minutos`;
 };
 
 /**
@@ -135,9 +103,9 @@ export const getTimeHoursAndMinutes = (countMinutes) => {
  */
 
 export const getSpecialtiesToProfessions = (profession) => {
-  return get(profession, 'divideds', []).map((divided) => {
+  return get(profession, "divideds", []).map((divided) => {
     return {
-      ...get(divided, 'specialty', {}),
+      ...get(divided, "specialty", {}),
     };
   });
 };
@@ -161,10 +129,10 @@ export const getFileStorageObjectByTag = (fileStorages, objectTag) => {
  */
 
 export const getHostname = (req, trueHost = false) => {
-  let hostname = 'localhost';
+  let hostname = "localhost";
   if (req) {
-    const host = req ? get(req.headers, 'x-forwarded-host', req.headers.host) : '';
-    hostname = host?.indexOf('localhost') !== -1 && !trueHost ? 'localhost' : host;
+    const host = req ? get(req.headers, "x-forwarded-host", req.headers.host) : "";
+    hostname = host?.indexOf("localhost") !== -1 && !trueHost ? "localhost" : host;
   }
   return hostname;
 };
@@ -179,9 +147,9 @@ export const getHostname = (req, trueHost = false) => {
 
 export const getCookieName = (hostname, cookieName) => {
   let cookieNameFinished;
-  const isServer = typeof window === 'undefined';
+  const isServer = typeof window === "undefined";
   const fullCookieName = `${hostname}-${cookieName}`;
-  if (isServer) cookieNameFinished = Buffer.from(fullCookieName).toString('base64');
+  if (isServer) cookieNameFinished = Buffer.from(fullCookieName).toString("base64");
   else cookieNameFinished = btoa(fullCookieName);
   // console.log(`isServer: ${isServer}, base64: ${cookieNameFinished}, hostname: ${hostname}`);
   return cookieNameFinished.slice(0, 10);
@@ -197,7 +165,7 @@ export const getCookieName = (hostname, cookieName) => {
 
 export const getEnableAuthStorageData = (auth) => {
   if (!auth) return {};
-  const enableKey = ['societyId', 'tokenUser', 'dataUser'];
+  const enableKey = ["societyId", "tokenUser", "dataUser"];
   return Object.keys(auth).reduce((accumulator, currentValue) => {
     return {
       ...accumulator,
@@ -217,29 +185,29 @@ export const getEnableAuthStorageData = (auth) => {
 export const getEnableUserData = (user) => {
   if (!user) return {};
   const enableKey = [
-    'id',
-    'firstName',
-    'lastName',
-    'identityCard',
-    'birthday',
-    'username',
-    'email',
-    'codeReference',
-    'nit',
-    'gender',
-    'Biography',
-    'phone',
-    'proffesion',
-    'affiliationDate',
-    'upToDate',
-    'userTypeId',
-    'userStateId',
-    'instituteId',
-    'societyId',
-    'subSocietyId',
-    'customizablePageId',
-    'userTypeName',
-    'fileStorages',
+    "id",
+    "firstName",
+    "lastName",
+    "identityCard",
+    "birthday",
+    "username",
+    "email",
+    "codeReference",
+    "nit",
+    "gender",
+    "Biography",
+    "phone",
+    "proffesion",
+    "affiliationDate",
+    "upToDate",
+    "userTypeId",
+    "userStateId",
+    "instituteId",
+    "societyId",
+    "subSocietyId",
+    "customizablePageId",
+    "userTypeName",
+    "fileStorages",
   ];
   return Object.keys(user).reduce((accumulator, currentValue) => {
     return {
@@ -259,7 +227,7 @@ export const getEnableUserData = (user) => {
 
 export const getEnableUserStorageData = (user) => {
   if (!user) return {};
-  const enableKey = ['user', 'authenticated', 'userTypes', 'token'];
+  const enableKey = ["user", "authenticated", "userTypes", "token"];
   return Object.keys(user).reduce((accumulator, currentValue) => {
     return {
       ...accumulator,

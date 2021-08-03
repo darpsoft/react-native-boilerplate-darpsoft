@@ -1,4 +1,4 @@
-import { put, takeLatest, select, all, call } from "redux-saga/effects";
+import { put, takeLatest, all, call } from "redux-saga/effects";
 import request, { getOptionsWithToken, postOptions, showMessageError } from "@utils/request";
 
 import { showLoader, hideLoader, loginSuccess } from "@redux/actions";
@@ -6,7 +6,7 @@ import { LOGIN_START, REGISTER_START, UPDATE_REDUX_AUTH_START } from "@redux/con
 import { database } from "@database";
 import Config from "react-native-config";
 
-let filter = {
+const filter = {
   where: {},
 };
 
@@ -32,13 +32,12 @@ export function* Login({ payload }) {
 }
 
 export function* Register() {
-  const storage = yield select((state) => state);
   try {
     yield put(showLoader());
-    yield all([put(hideLoader())]);
   } catch (err) {
-    yield put(hideLoader());
     yield showMessageError(err);
+  } finally {
+    yield put(hideLoader());
   }
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-unused-styles */
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useTheme } from "react-native-paper";

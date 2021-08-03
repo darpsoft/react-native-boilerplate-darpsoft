@@ -59,6 +59,7 @@ const methods = (nameStorage) => ({
           break;
         case "array":
           // "Array" significa que va a obtener todo lo que existe y agrega uno nuevo
+          // eslint-disable-next-line no-case-declarations
           const requestValues = await this.get();
           await AsyncStorage.setItem(nameStorage, JSON.stringify([...requestValues, values]));
           break;
@@ -92,6 +93,7 @@ const methods = (nameStorage) => ({
   },
 });
 
+// eslint-disable-next-line no-unused-vars
 const extraTrainings = {
   getCategory: function () {},
 };

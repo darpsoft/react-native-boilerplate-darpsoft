@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator, CardStyleInterpolators } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -9,9 +9,7 @@ import "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { updateReduxAuthStart } from "@redux/actions";
 import { customUseReducer } from "@utils/customHooks";
-import { storage } from "../../index";
 
-var { height } = Dimensions.get("window");
 // Auth
 import Home from "@screens/Home";
 
@@ -21,8 +19,9 @@ import Register from "@screens/Register";
 
 // SplashScreen
 import SplashScreen from "@components/SplashScreen";
-import { throttle } from "lodash";
 import { database } from "@database";
+
+const { height } = Dimensions.get("window");
 
 const RootStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,18 +95,48 @@ export const Root = ({ loading }) => {
   );
 };
 
+/**
+ * Cuando se agregue un nuevo persis,
+ * se tiene que colocar aquí
+ */
+// eslint-disable-next-line prefer-const
+let firstLoad = {
+  auth: true,
+};
+
+const PersisReducer = () => {
+  const auth = useSelector(({ auth }) => auth);
+
+  useEffect(() => {
+    saveReducerData("auth", auth);
+  }, [auth]);
+
+  /**
+   * Función para guardar los datos cuando se actualice el Storage,
+   * en este caso solo guardará <auth>
+   */
+  async function saveReducerData(nameReducer, storage) {
+    if (!firstLoad[nameReducer]) {
+      await database[nameReducer].set(storage, "object");
+    } else {
+      firstLoad[nameReducer] = false;
+    }
+  }
+
+  return <View />;
+};
+
 const initialState = {
   loading: true,
 };
 
-export default AppCreate = () => {
+const AppCreate = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [state, dispatchComponent] = customUseReducer(initialState);
 
   useEffect(() => {
     initialRequest();
-    suscribeStorage();
   }, []);
 
   const initialRequest = async () => {
@@ -124,20 +153,12 @@ export default AppCreate = () => {
       });
   };
 
-  /**
-   * Función para guardar los datos cuando se actualice el Storage, en este caso solo guardará <user, auth>
-   */
-  const suscribeStorage = () => {
-    storage.subscribe(
-      throttle(() => {
-        const { auth } = storage.getState();
-        database.auth.set(auth, "object");
-      }, 200)
-    );
-  };
   return (
     <NavigationContainer theme={theme}>
       <Root loading={state.loading} />
+      <PersisReducer />
     </NavigationContainer>
   );
 };
+
+export default AppCreate;

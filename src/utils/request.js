@@ -167,7 +167,6 @@ export async function showMessageError(err) {
         default:
           if (errResp.error.message) {
             // message.error(errResp.error.message);
-            return;
           }
         // message.error(err.message);
       }

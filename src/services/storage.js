@@ -1,5 +1,5 @@
-import { storage } from "../../../index";
-import request, { getOptionsWithToken, getOptions } from "../request";
+import { storage } from "../../index";
+import request, { getOptionsWithToken, getOptions } from "../utils/request";
 import Config from "react-native-config";
 
 export class CreateFilter {
@@ -35,10 +35,6 @@ export class CreateFilter {
     this.filterQuery = value;
   }
 
-  getFilterQuery() {
-    return this.filterQuery;
-  }
-
   setFilterRelationWhere(value) {
     this.filterRelationWhere = value;
   }
@@ -58,6 +54,7 @@ export class CreateFilter {
   setFormatNested(value) {
     this.formatNested = value;
   }
+
   setFormatNestedTo(value) {
     this.formatNestedTo = value;
   }
@@ -115,17 +112,6 @@ export class CreateFilter {
       ...this.filterWhere,
       where,
     };
-  }
-
-  setFilterWhereWithSociety() {
-    const isLogged = Object.keys(this.getStorage("auth").dataUser).length === 0;
-    if (isLogged) {
-      this.setFilterWhereDefault("societyId", this.getStorage("auth").societyId);
-    } else {
-      const { subSocietyId, societyId } = this.getStorage("auth").dataUser;
-      const society = subSocietyId !== null && subSocietyId !== "" ? subSocietyId : societyId;
-      this.setFilterWhereDefault("societyId", society);
-    }
   }
 
   setSocietyFilterWhere(key, value) {
@@ -198,18 +184,12 @@ export class CreateFilter {
   }
 }
 
-export class StorageServices extends CreateFilter {
+export class Middleware extends CreateFilter {
   constructor() {
     super();
     this.typeStorage = "";
     this.nameStorage = "";
     this.store = {};
-  }
-
-  async setStorageCtx(ctx) {
-    this.typeStorage = "ctx";
-    // this.store = getOrCreateStore(await defaultValueStorage(ctx)).getState();
-    this.store = storage.getState();
   }
 
   async setStorageDefault(storage) {
@@ -218,7 +198,7 @@ export class StorageServices extends CreateFilter {
   }
 
   getOptions() {
-    return this.typeStorage !== "" ? getOptionsWithToken(this.store.auth.tokenUser) : getOptions();
+    return this.typeStorage !== "" ? getOptionsWithToken(this.store.user.token) : getOptions();
   }
 
   ifExist(nameStorage) {
@@ -230,64 +210,13 @@ export class StorageServices extends CreateFilter {
     if (Object.keys(this.store).length === 0) {
       this.store = storage.getState();
     }
-    return this.store[nameStorage ? nameStorage : this.nameStorage];
+    return this.store[nameStorage || this.nameStorage];
   }
 
   async getFetchEndpoint(nameEndpoint) {
-    function filtro(element) {
-      return element;
-    }
-
-    const formatNested = this.getFormatNestedTo() !== "" ? "&formatNestedTo=" + this.getFormatNestedTo() : "&formatNested=" + this.getFormatNested();
-
-    try {
-      const url = `${Config.URL_API}/${nameEndpoint}`;
-      const options = this.getOptions();
-      console.log(`Url : ${nameEndpoint} |`, JSON.stringify(this.getFilterEndpoint()));
-      return await request(
-        `${url}?filter=${encodeURI(JSON.stringify(this.getFilterEndpoint()))}${
-          this.formatFunctionTo ? "&formatFunctionTo=" + filtro.toString() : formatNested
-        }${this.getFilterQuery()}`,
-        options
-      );
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getFetchWithSociety(nameEndpoint) {
-    try {
-      let requestData = [];
-      const filter = {
-        where: this.filterWhereSociety,
-        fields: {
-          id: true,
-          name: true,
-        },
-        include: [
-          {
-            relation: nameEndpoint,
-            scope: this.getFilterEndpoint(),
-          },
-        ],
-      };
-      const url = `${Config.URL_API}/societies`;
-      const options = this.getOptions();
-      const requests = await request(`${url}?filter=${encodeURI(JSON.stringify(filter))}`, options);
-      requests
-        .filter((request) => request[nameEndpoint])
-        .forEach((request) => {
-          requestData = [
-            ...requestData,
-            ...request[nameEndpoint].map((e) => ({
-              ...e,
-              societyName: request.name,
-            })),
-          ];
-        });
-      return requestData;
-    } catch (error) {
-      throw error;
-    }
+    const url = `${Config.URL_API}/${nameEndpoint}`;
+    const options = this.getOptions();
+    // console.log(`Url : ${nameEndpoint} |`, JSON.stringify(this.getFilterEndpoint()));
+    return await request(`${url}?filter=${encodeURI(JSON.stringify(this.getFilterEndpoint()))}`, options);
   }
 }

@@ -1,4 +1,11 @@
-import { LOGIN_START, LOGIN_SUCCESS, REGISTER_START, REGISTER_SUCCESS, UPDATE_REDUX_AUTH_START, UPDATE_REDUX_AUTH_SUCCESS } from "@redux/constants";
+import {
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  REGISTER_START,
+  REGISTER_SUCCESS,
+  UPDATE_REDUX_AUTH_START,
+  UPDATE_REDUX_AUTH_SUCCESS,
+} from "@redux/constants";
 
 export const loginStart = (payload) => ({
   type: LOGIN_START,

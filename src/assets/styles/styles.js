@@ -1,5 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
-var { width, height } = Dimensions.get("window");
+import { StyleSheet } from "react-native";
 
 export const useStyleUniversal = (theme) => {
   return StyleSheet.create({

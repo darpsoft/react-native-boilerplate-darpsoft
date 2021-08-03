@@ -1,6 +1,7 @@
 import { StorageServices } from "./storage";
 
 export class UsersServices extends StorageServices {
+  // eslint-disable-next-line no-useless-constructor
   constructor() {
     super();
   }
@@ -9,7 +10,6 @@ export class UsersServices extends StorageServices {
     const filter = {};
     try {
       this.setFilterEndpoint(filter);
-      this.setFormatNestedTo("");
       return await this.getFetchEndpoint(`users`);
     } catch (e) {
       console.log(e);

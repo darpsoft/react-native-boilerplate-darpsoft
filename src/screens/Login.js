@@ -57,7 +57,14 @@ const Login = () => {
               errors={errors}
               control={control}
               render={({ onChange, onBlur, value }) => (
-                <TextInput {...input} style={styles.input} onBlur={onBlur} onChangeText={(value) => onChange(value)} value={value} error={errors[input.name]} />
+                <TextInput
+                  {...input}
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  error={errors[input.name]}
+                />
               )}
             />
           ))}

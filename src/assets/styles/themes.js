@@ -1,18 +1,28 @@
 import { DarkTheme, DefaultTheme } from "react-native-paper";
 
+// eslint-disable-next-line no-unused-vars
 const codGray900 = "#090909"; // 900
+// eslint-disable-next-line no-unused-vars
 const codGray800 = "#121212"; // 800
+// eslint-disable-next-line no-unused-vars
 const codGray700 = "#1a1a1a"; // 700
+// eslint-disable-next-line no-unused-vars
 const codGray600 = "#1f1e1e"; // 600
+// eslint-disable-next-line no-unused-vars
 const codGray500 = "#434343"; // 500
 const codGray400 = "#595959"; // 400
+// eslint-disable-next-line no-unused-vars
 const codGray200 = "#696969"; // 200
+// eslint-disable-next-line no-unused-vars
 const codGray90 = "#828282"; // 90
 const codGray70 = "#a7a7a7"; // 70
+// eslint-disable-next-line no-unused-vars
 const codGray50 = "#c0c0c0"; // 50
+// eslint-disable-next-line no-unused-vars
 const codGray30 = "#d9d9d9"; // 30
 const codGray20 = "#e6e6e6"; // 30
 const codGray10 = "#f2f2f2"; // 10
+// eslint-disable-next-line no-unused-vars
 const codGray5 = "#f0f0f0"; // 5
 
 const customDark = {
