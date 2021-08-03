@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions, PixelRatio } from "react-native";
 const fontScale = PixelRatio.getFontScale();
 const { width } = Dimensions.get("window");
 
-calculateSize = (size) => {
+const calculateSize = (size) => {
   let sizeFont = 0;
   if (width >= 401 && width <= 420) {
     sizeFont = size * 1;

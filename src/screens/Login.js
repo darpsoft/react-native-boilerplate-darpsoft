@@ -2,10 +2,11 @@ import React, { useMemo } from "react";
 import { Dimensions, Image, StyleSheet, View } from "react-native";
 import { Button, TextInput, useTheme } from "react-native-paper";
 import { useStyleUniversal } from "@assets/styles/styles";
-import { Wrapper, Text, ControllerTextInput } from "@components/index";
+import { Wrapper, ControllerTextInput } from "@components/index";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { loginStart } from "@redux/actions";
+import TextApp from "@components/TextApp";
 
 const { width } = Dimensions.get("window");
 
@@ -48,7 +49,7 @@ const Login = () => {
       <View style={{ flex: 1, justifyContent: "center" }}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Image source={require("../assets/images/logo.png")} resizeMode="cover" style={{ width: width * 0.6, height: width * 0.6 }} />
-          <Text>Bienvenido</Text>
+          <TextApp.Default fontSize="22">Bienvenido</TextApp.Default>
         </View>
         {inputsForm
           .filter((input) => input.status)
