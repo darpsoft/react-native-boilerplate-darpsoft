@@ -9,8 +9,14 @@ import { changeTheme } from "./src/assets/styles/themes";
 import { Provider, useSelector } from "react-redux";
 import reduxStore from "./src/redux";
 import Config from "react-native-config";
+import SplashScreen from "@components/SplashScreen";
+import { useReducerCustom } from "@utils/customHooks";
+import { database } from "./src/database";
 
-export const storage = reduxStore();
+export const getStorageAsync = async () => {
+  const auth = await database.auth.get("object");
+  return { ...(auth ?? {}) };
+};
 
 const WithStatusBar = () => {
   const theme = useTheme();
@@ -31,14 +37,29 @@ const WithPaper = () => {
   );
 };
 
+const initialState = {
+  loading: true,
+  reducers: null,
+};
+
 function Main() {
-  console.log(Config);
+  const [state, dispatchComponent] = useReducerCustom(initialState);
+
   useEffect(() => {
     console.log(`Versión ${Config.VERSION_NAME}`);
+    initialRequest();
   }, []);
 
+  const initialRequest = async () => {
+    !state.loading && dispatchComponent({ loading: true });
+    const reducers = await getStorageAsync();
+    dispatchComponent({ loading: false, reducers });
+  };
+
+  if (state.loading) return <SplashScreen />;
+
   return (
-    <Provider store={storage}>
+    <Provider store={reduxStore(state.reducers)}>
       <WithPaper />
     </Provider>
   );

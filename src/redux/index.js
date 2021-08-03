@@ -6,9 +6,9 @@ import rootSaga from "./sagas";
 
 const sagaMiddleware = reduxSaga();
 
-const reduxStorage = () => {
+const reduxStorage = (injectReducer = {}) => {
   return {
-    ...createStore(reducers, applyMiddleware(sagaMiddleware)),
+    ...createStore(reducers(injectReducer), applyMiddleware(sagaMiddleware)),
     runSaga: sagaMiddleware.run(rootSaga),
   };
 };

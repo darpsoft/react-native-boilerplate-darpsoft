@@ -8,7 +8,7 @@ export const SplashScreen = () => {
   const styles = { ...useStyle(theme), ...useStyleUniversal(theme) };
   return (
     <View style={styles.containers}>
-      <ActivityIndicator size="large" />
+      <ActivityIndicator size="large" color={theme.colors.primary} />
       <Text>Cargando datos...</Text>
     </View>
   );

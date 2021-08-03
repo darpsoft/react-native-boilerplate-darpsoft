@@ -1,4 +1,4 @@
-import { put, takeLatest, all, call } from "redux-saga/effects";
+import { put, takeLatest, call } from "redux-saga/effects";
 import request, { getOptionsWithToken, postOptions, showMessageError } from "@utils/request";
 
 import { showLoader, hideLoader, loginSuccess } from "@redux/actions";
@@ -24,10 +24,11 @@ export function* Login({ payload }) {
     options = getOptionsWithToken(requestToken.token);
     const requestUser = yield call(request, url, options);
 
-    yield all([put(loginSuccess({ tokenUser: requestToken.token, dataUser: requestUser[0] })), put(hideLoader())]);
+    yield put(loginSuccess({ tokenUser: requestToken.token, dataUser: requestUser[0] }));
   } catch (err) {
-    yield put(hideLoader());
     yield showMessageError(err);
+  } finally {
+    yield put(hideLoader());
   }
 }
 

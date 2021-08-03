@@ -4,7 +4,7 @@ import { Button, TextInput, useTheme } from "react-native-paper";
 import { useStyleUniversal } from "@assets/styles/styles";
 import { Wrapper, ControllerTextInput } from "@components/index";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginStart } from "@redux/actions";
 import TextApp from "@components/TextApp";
 
@@ -37,6 +37,7 @@ const Login = () => {
   const styles = { ...useStyle(theme), ...useStyleUniversal(theme) };
   const { control, handleSubmit, errors } = useForm();
   const inputsForm = useMemo(() => getInputsForm({ control }), []);
+  const { loader } = useSelector(({ auth }) => auth);
   const dispatch = useDispatch();
 
   const handleRegister = (values) => {
@@ -49,7 +50,7 @@ const Login = () => {
       <View style={{ flex: 1, justifyContent: "center" }}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Image source={require("../assets/images/logo.png")} resizeMode="cover" style={{ width: width * 0.6, height: width * 0.6 }} />
-          <TextApp.Default fontSize="22">Bienvenido</TextApp.Default>
+          <TextApp.Default fontSize="22">Bienvenidos</TextApp.Default>
         </View>
         {inputsForm
           .filter((input) => input.status)
@@ -72,7 +73,7 @@ const Login = () => {
             />
           ))}
 
-        <Button mode="contained" onPress={handleSubmit(handleRegister)}>
+        <Button mode="contained" loading={loader} onPress={handleSubmit(handleRegister)}>
           Iniciar Sesión
         </Button>
       </View>

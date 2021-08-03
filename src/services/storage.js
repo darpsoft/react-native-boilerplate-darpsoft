@@ -1,4 +1,4 @@
-import { storage } from "../../index";
+import reduxStorage from "../redux/index";
 import request, { getOptionsWithToken, getOptions } from "../utils/request";
 import Config from "react-native-config";
 
@@ -206,9 +206,9 @@ export class Middleware extends CreateFilter {
     return this.store[nameStorage].data.length > 0;
   }
 
-  getStorage(nameStorage) {
+  async getStorage(nameStorage) {
     if (Object.keys(this.store).length === 0) {
-      this.store = storage.getState();
+      this.store = await reduxStorage().getState();
     }
     return this.store[nameStorage || this.nameStorage];
   }

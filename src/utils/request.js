@@ -1,4 +1,7 @@
-import { storage } from "../../index";
+import { isArray } from "lodash";
+// eslint-disable-next-line react-native/split-platform-components
+import { ToastAndroid } from "react-native";
+import reduxStorage from "../redux/index";
 
 /**
  * Parses the JSON returned by a network request
@@ -45,7 +48,7 @@ export default function request(url, options) {
 }
 
 export function postOptionsFormData(body = {}, method = "POST") {
-  const { tokenUser } = storage.getState().auth;
+  const { tokenUser } = reduxStorage().getState().auth;
   return {
     method,
     headers: {
@@ -67,7 +70,7 @@ export function postOptionsWithoutToken(body = {}, method = "POST") {
 }
 
 export function getOptions(method = "GET") {
-  const { tokenUser } = storage.getState().auth;
+  const { tokenUser } = reduxStorage().getState().auth;
   return {
     method,
     headers: {
@@ -100,7 +103,7 @@ export function getOptionsWithoutToken(method = "GET") {
 }
 
 export function postOptions(body = {}, method = "POST") {
-  const { tokenUser } = storage.getState().auth;
+  const { tokenUser } = reduxStorage().getState().auth;
   return {
     method,
     headers: {
@@ -113,7 +116,7 @@ export function postOptions(body = {}, method = "POST") {
 }
 
 export function putOptions(body = {}, method = "PUT") {
-  const store = storage.getState();
+  const store = reduxStorage().getState();
   return {
     method,
     headers: {
@@ -125,7 +128,7 @@ export function putOptions(body = {}, method = "PUT") {
 }
 
 export function patchOptions(body = {}, method = "PATCH") {
-  const store = storage.getState();
+  const store = reduxStorage().getState();
   return {
     method,
     headers: {
@@ -138,7 +141,7 @@ export function patchOptions(body = {}, method = "PATCH") {
 }
 
 export function deleteOptions(body, method = "DELETE") {
-  const store = storage.getState();
+  const store = reduxStorage().getState();
   return {
     method,
     headers: {
@@ -151,25 +154,44 @@ export function deleteOptions(body, method = "DELETE") {
 
 export async function showMessageError(err) {
   if (typeof err === "string") {
-    // message.error(err);
+    // @ts-ignore
+    console.log(err);
+    ToastAndroid.show(err, ToastAndroid.LONG);
     return;
   }
   if (err.response) {
-    const errResp = await err.response.json();
-    if (errResp.error) {
-      switch (errResp.error.statusCode) {
-        case 422:
-          // message.error(errResp.error.details[0].message);
-          return;
-        case 500:
-          // message.error(errResp.error.message);
-          return;
-        default:
-          if (errResp.error.message) {
-            // message.error(errResp.error.message);
-          }
-        // message.error(err.message);
+    try {
+      const errResp = await err?.response?.json();
+      if (errResp.error) {
+        switch (errResp.error.statusCode) {
+          case 422:
+            // @ts-ignore
+            if (isArray(errResp.error.details)) {
+              ToastAndroid.show(errResp.error.details[0].message, ToastAndroid.LONG);
+              return;
+            }
+            // @ts-ignore
+            ToastAndroid.show(errResp.error.message, ToastAndroid.LONG);
+            return;
+          case 500:
+            // @ts-ignore
+            ToastAndroid.show(errResp.error.message, ToastAndroid.LONG);
+            return;
+          default:
+            if (errResp.error.message) {
+              // @ts-ignore
+              ToastAndroid.show(errResp.error.message, ToastAndroid.LONG);
+              return;
+            }
+            // @ts-ignore
+            ToastAndroid.show(err.message, ToastAndroid.LONG);
+        }
       }
+    } catch (err) {
+      console.log(err.response);
+      ToastAndroid.show("Error interno del servidor", ToastAndroid.LONG);
     }
+  } else {
+    console.log("🚀 ~ file: request.js ~ line 195 ~ showMessageError ~ err", err);
   }
 }

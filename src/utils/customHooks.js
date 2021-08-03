@@ -9,6 +9,6 @@ export const reducer = (state, action) => {
   }
 };
 
-export const customUseReducer = (initialState) => {
+export const useReducerCustom = (initialState) => {
   return useReducer(reducer, initialState);
 };
